@@ -1,25 +1,24 @@
 package de.androbin.opengl.modelviewer;
 
-import static de.androbin.util.JSONUtil.*;
-import org.json.simple.*;
+import de.androbin.json.*;
 
 public final class Configuration {
-  private static final JSONObject CONFIG = (JSONObject) parseJSON( "config.json" ).get();
+  private static final XObject CONFIG = JSONUtil.readJSON( "config.json" ).get().asObject();
   
   public static final class display_ {
-    private static final JSONObject CONFIG_DISPLAY = (JSONObject) CONFIG.get( "display" );
+    private static final XObject CONFIG_DISPLAY = CONFIG.get( "display" ).asObject();
     
-    public static final float SCALE = ( (Number) CONFIG_DISPLAY.get( "scale" ) ).floatValue();
+    public static final float SCALE = CONFIG_DISPLAY.get( "scale" ).asFloat();
     
-    public static final int FPS = ( (Number) CONFIG_DISPLAY.get( "fps" ) ).intValue();
+    public static final int FPS = CONFIG_DISPLAY.get( "fps" ).asInt();
   }
   
   public static final class viewer_ {
-    private static final JSONObject CONFIG_VIEWER = (JSONObject) CONFIG.get( "viewer" );
+    private static final XObject CONFIG_VIEWER = CONFIG.get( "viewer" ).asObject();
     
-    public static final float CAMERA_SENSITIVITY = ( (Number) CONFIG_VIEWER
-        .get( "camera_sensitivity" ) ).floatValue();
+    public static final float CAMERA_SENSITIVITY = CONFIG_VIEWER.get( "camera_sensitivity" )
+        .asFloat();
     
-    public static final String TITLE = (String) CONFIG_VIEWER.get( "title" );
+    public static final String TITLE = CONFIG_VIEWER.get( "title" ).asString();
   }
 }
