@@ -3,7 +3,7 @@ package de.androbin.opengl.modelviewer;
 import de.androbin.json.*;
 
 public final class Configuration {
-  private static final XObject CONFIG = JSONUtil.readJSON( "config.json" ).get().asObject();
+  private static final XObject CONFIG = XUtil.readJSON( "config.json" ).get().asObject();
   
   public static final class display_ {
     private static final XObject CONFIG_DISPLAY = CONFIG.get( "display" ).asObject();

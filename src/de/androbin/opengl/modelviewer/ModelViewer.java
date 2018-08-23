@@ -15,10 +15,12 @@ import de.androbin.shell.*;
 import de.androbin.shell.env.*;
 import de.androbin.shell.gfx.*;
 import de.androbin.shell.input.*;
+import de.androbin.shell.input.tee.*;
 import java.io.*;
+import java.nio.file.*;
 import org.lwjgl.util.vector.*;
 
-public final class ModelViewer extends BasicShell implements KeyInput, GLGraphics {
+public final class ModelViewer extends AbstractShell implements KeyInput, GLGraphics {
   private final MightyCam3D camera;
   
   private Vector3f lightPosition;
@@ -26,7 +28,7 @@ public final class ModelViewer extends BasicShell implements KeyInput, GLGraphic
   
   private final int displayList;
   
-  public ModelViewer( final File file ) {
+  public ModelViewer( final Path file ) {
     this( loadModel( file ) );
   }
   
@@ -40,9 +42,9 @@ public final class ModelViewer extends BasicShell implements KeyInput, GLGraphic
     
     displayList = model.createDisplayList();
     
-    addKeyInput( this );
-    addKeyInput( camera.keys );
-    addMouseMotionInput( camera.mouseTrack );
+    final Inputs inputs = getInputs();
+    inputs.keyboard = KeyInputTee.from( this, camera.keys );
+    inputs.mouseMotion = camera.mouseTrack;
   }
   
   @ Override
@@ -87,7 +89,7 @@ public final class ModelViewer extends BasicShell implements KeyInput, GLGraphic
     GLEnv.initGeneral();
     GLEnv.init3D();
     
-    new GLEnv( new ModelViewer( file ), FPS ).run();
+    new GLEnv( new ModelViewer( file.toPath() ), FPS ).run();
   }
   
   @ Override
@@ -113,10 +115,6 @@ public final class ModelViewer extends BasicShell implements KeyInput, GLGraphic
     } else {
       lightPosition = new Vector3f( lightPosition );
     }
-  }
-  
-  @ Override
-  public void update( final float delta ) {
   }
   
   @ Override
